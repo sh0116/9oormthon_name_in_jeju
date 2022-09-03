@@ -6,4 +6,4 @@ RUN git clone https://github.com/sh0116/9oornthoon_name_in_jeju.git
 RUN pip install -r 9oornthoon_name_in_jeju/requirements.txt
 RUN cp 9oornthoon_name_in_jeju/lambda_function.py /var/task
 
-CMD [lambda_function.handler]
+CMD ["lambda_function.handler"]
