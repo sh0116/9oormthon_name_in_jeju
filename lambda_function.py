@@ -3,7 +3,8 @@ import json
 import pickle
 import torch
 
-PATH = '/var/task/9oornthoon_name_in_jeju/model/9oormthon'
+# PATH = '/var/task/9oornthoon_name_in_jeju/model/9oormthon'
+PATH = '/var/task/9oornthoon_name_in_jeju/9oormthon'
 ## 만약 CPU 로 작업하는 경우에는 밑에 두개 주석을 해제하세요!
 
 device = "cpu"
