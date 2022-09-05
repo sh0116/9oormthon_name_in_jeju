@@ -2,28 +2,32 @@ import io
 import json
 import pickle
 import torch
+import numpy as np
 
 from flask_cors import CORS
 from flask import Flask, jsonify, request
 
 
-PATH = '/home/ubuntu/PROJECT/restful_api/pytorch-flask-api/9oormthon'
+PATH = '/home/ubuntu/project/9oornthoon_name_in_jeju/model/9oormthon'
 ## 만약 CPU 로 작업하는 경우에는 밑에 두개 주석을 해제하세요!
-
-device = "cpu"
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+print("log : device is {}".format(device))
 models = torch.load(PATH+'model.pt',map_location=device)  # 전체 모델을 통째로 불러옴, 클래스 선언 필수
-models.load_state_dict(torch.load(PATH + 'model_state_dict.pt', map_location=device))  # state_dict를 불러 온 후, 모델에 저장
+print("log : load model")
+#models.load_state_dict(torch.load(PATH + 'model_state_dict.pt', map_location=device))  # state_dict를 불러 온 후, 모델에 저장
+print("log : load state dict model")
 # models.to(device)
 
 #제주어 사전 가져오기 (표준 -> 제주)
-path = '/home/ubuntu/PROJECT/restful_api/pytorch-flask-api/jeju_dict_t2.pkl'
+path = '/home/ubuntu/project/9oornthoon_name_in_jeju/model/jeju_dict_t2.pkl'
 with open(path,'rb') as f:
   jeju_dict_t = pickle.load(f)
 
+print("log : load jejuword dict")
 words = list(jeju_dict_t.keys())
 
 #사전에 있는 한국어 데이터셋을 가져온다.
-document_embeddings = models.encode(words,device=device)
+document_embeddings = np.load(PATH+"_embeddings.npy")
 
 app = Flask(__name__)
 CORS(app)
