@@ -7,8 +7,7 @@ import numpy as np
 from flask_cors import CORS
 from flask import Flask, jsonify, request
 
-
-PATH = '/home/ubuntu/project/9oornthoon_name_in_jeju/model/9oormthon'
+PATH = '/home/ubuntu/project/9oormthon_name_in_jeju/model/9oormthon'
 ## 만약 CPU 로 작업하는 경우에는 밑에 두개 주석을 해제하세요!
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 print("log : device is {}".format(device))
@@ -19,7 +18,7 @@ print("log : load state dict model")
 # models.to(device)
 
 #제주어 사전 가져오기 (표준 -> 제주)
-path = '/home/ubuntu/project/9oornthoon_name_in_jeju/model/jeju_dict_t2.pkl'
+path = '/home/ubuntu/project/9oormthon_name_in_jeju/model/jeju_dict_t2.pkl'
 with open(path,'rb') as f:
   jeju_dict_t = pickle.load(f)
 
@@ -31,6 +30,8 @@ document_embeddings = np.load(PATH+"_embeddings.npy")
 
 app = Flask(__name__)
 CORS(app)
+
+
 m = ['자국떼다', '신관', '남소왕이', '욜다', '풀돋잇마', '고막곶', '바당이영', '건들마', '벨롱겡이', '곳다', '끙물다변', '속도']
 
 d = ['옵서', '날봅서', '천성', '올르다', '뒈게', '영낙읏이', '아며도', '심껏', '반시', '침내', '놀놀', '느런히', '엇다', '어중구랑', '아깝다', '조금사리', '히뜨거니', 
@@ -99,19 +100,25 @@ def Jeju_name_md(nm,nd):
   return m[int(nm)-1]+d[int(nd)-1]
 
 @app.route('/birthtransfer',methods = ['POST', 'GET'])
-def birthtransfer():
+def post_birth():
     if request.method == 'POST':
-      print(request.data.decode('utf-8')[1:-1].split(","))
-      nm,nd = request.data.decode('utf-8')[1:-1].split(",")
+       print(request.data.decode('utf-8')[1:-1].split(","))
+       nm,nd = request.data.decode('utf-8')[1:-1].split(",")
     return Jeju_name_md(nm,nd)
 
 
 @app.route('/transfer',methods = ['POST', 'GET'])
-def transfer():
+def post_transfer():
     if request.method == 'POST':
         res = ""
         for _ in request.data.decode('utf-8')[2:-2].split("\",\""):
             res += NameInJeju_t(_)
+
+    with open('../count_people','r') as f:
+        data = int(f.readline())
+    with open('../count_people','w') as f:
+        f.write(str(data+1))
+    print("logging : count => {}".format(data))
     return res
 
 
