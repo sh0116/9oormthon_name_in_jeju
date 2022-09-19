@@ -104,6 +104,12 @@ def post_birth():
     if request.method == 'POST':
        print(request.data.decode('utf-8')[1:-1].split(","))
        nm,nd = request.data.decode('utf-8')[1:-1].split(",")
+    with open('../count_people','r') as f:
+        data = int(f.readline())
+    with open('../count_people','w') as f:
+        f.write(str(data+1))
+    print("logging : count => {}".format(data))
+
     return Jeju_name_md(nm,nd)
 
 
