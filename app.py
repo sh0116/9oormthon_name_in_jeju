@@ -65,7 +65,7 @@ def jej_trans_t(text):
       result.append(t)
     else:
       result.append(t)
-  return ' '.join(result)
+  return result
 def NameInJeju_t(text):
   query = text
   query_embedding = models.encode(query,device=device)
@@ -97,7 +97,7 @@ def NameInJeju_t(text):
   return result
 
 def Jeju_name_md(nm,nd):
-  return m[int(nm)-1]+d[int(nd)-1]
+  return [m[int(nm)-1],d[int(nd)-1]]
 
 @app.route('/birthtransfer',methods = ['POST', 'GET'])
 def post_birth():
@@ -115,8 +115,9 @@ def post_birth():
 
 @app.route('/transfer',methods = ['POST', 'GET'])
 def post_transfer():
+    print(request.data)
     if request.method == 'POST':
-        res = ""
+        res = list()
         for _ in request.data.decode('utf-8')[2:-2].split("\",\""):
             res += NameInJeju_t(_)
 
